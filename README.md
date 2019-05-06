@@ -1,0 +1,2 @@
+# physical_activity_data_science
+Repository for a 2 day course titled Physical Activity and Data Science for students in grades 8-9. The course will introduce students to the measurement of physical activity using a metabolic cart, and accelerometers and global positioning systems in smartphones and wearable devices. With the data students collect we will introduce basic concepts of data science including reading in data, data visualization, and basic math functions using the R statistical programming language.
