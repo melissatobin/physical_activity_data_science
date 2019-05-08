@@ -10,24 +10,6 @@ output:
 
 ```r
 knitr::opts_chunk$set(echo = TRUE)
-library(tidyverse)
-```
-
-```
-## ── Attaching packages ───────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
-```
-
-```
-## ✔ ggplot2 2.2.1     ✔ purrr   0.2.4
-## ✔ tibble  1.4.2     ✔ dplyr   0.7.4
-## ✔ tidyr   0.8.0     ✔ stringr 1.3.0
-## ✔ readr   1.1.1     ✔ forcats 0.3.0
-```
-
-```
-## ── Conflicts ──────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()
 ```
 
 # Answer key for Physical Activity Data Science Workshop
@@ -36,6 +18,35 @@ library(tidyverse)
 
 ```r
 library(tidyverse)
+```
+
+```
+## ── Attaching packages ──────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
+```
+
+```
+## ✔ ggplot2 3.1.0       ✔ purrr   0.3.1  
+## ✔ tibble  2.0.1       ✔ dplyr   0.8.0.1
+## ✔ tidyr   0.8.3       ✔ stringr 1.4.0  
+## ✔ readr   1.3.1       ✔ forcats 0.4.0
+```
+
+```
+## ── Conflicts ─────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+```
+
+```r
+library(ggmap)
+```
+
+```
+## Google's Terms of Service: https://cloud.google.com/maps-platform/terms/.
+```
+
+```
+## Please cite ggmap if you use it! See citation("ggmap") for details.
 ```
 
 ## Accelerometer data section
@@ -49,12 +60,12 @@ accel_data <- read_csv("accel_data_example.csv")
 ```
 ## Parsed with column specification:
 ## cols(
-##   rowid = col_integer(),
+##   rowid = col_double(),
 ##   utcdate = col_datetime(format = ""),
 ##   ts = col_double(),
-##   x = col_integer(),
-##   y = col_integer(),
-##   z = col_integer()
+##   x = col_double(),
+##   y = col_double(),
+##   z = col_double()
 ## )
 ```
 
@@ -67,7 +78,7 @@ head(accel_data)
 ```
 ## # A tibble: 6 x 6
 ##   rowid utcdate                  ts     x     y     z
-##   <int> <dttm>                <dbl> <int> <int> <int>
+##   <dbl> <dttm>                <dbl> <dbl> <dbl> <dbl>
 ## 1     1 2018-08-02 16:16:50 3.10e13   -42  -117  -443
 ## 2     2 2018-08-02 16:16:50 3.10e13    16   -92  -431
 ## 3     3 2018-08-02 16:16:50 3.10e13    22     0  -440
@@ -94,6 +105,7 @@ accel_mean_x <- accel_data %>%
                   x_mean = mean(x),
                   x_sd = sd(x)
                 )
+
 head(accel_mean_x)
 ```
 
@@ -170,14 +182,15 @@ gps_data <- read_csv("gps_data_example.csv")
 ##   alt = col_double(),
 ##   mode1 = col_character(),
 ##   mode2 = col_double(),
-##   sat_used = col_integer(),
+##   sat_used = col_double(),
 ##   pdop = col_double(),
 ##   hdop = col_double(),
 ##   vdop = col_double(),
-##   sat_in_view = col_integer()
+##   sat_in_view = col_double()
 ## )
 ```
 
+### Check out the data
 
 ```r
 head(gps_data) 
@@ -193,8 +206,17 @@ head(gps_data)
 ## 4 3.10e13 2018-08-02 16:59:52  47.6 -52.7  2.9     -1  A     A      360.
 ## 5 3.10e13 2018-08-02 16:59:53  47.6 -52.7  3.01   221. A     A      360.
 ## 6 3.10e13 2018-08-02 17:00:56  47.6 -52.7  2.38    -1  A     A      362.
-## # ... with 7 more variables: mode1 <chr>, mode2 <dbl>, sat_used <int>,
-## #   pdop <dbl>, hdop <dbl>, vdop <dbl>, sat_in_view <int>
+## # … with 7 more variables: mode1 <chr>, mode2 <dbl>, sat_used <dbl>,
+## #   pdop <dbl>, hdop <dbl>, vdop <dbl>, sat_in_view <dbl>
+```
+
+### Missing data
+
+I know there is missing data. We are going to remove all missing. If you had
+
+```r
+gps_data <- gps_data %>% 
+              drop_na()
 ```
 
 ### GPS Data description
@@ -205,4 +227,81 @@ head(gps_data)
 * lon: the longitude
     * geographic coordinate that specifies the east–west position of a point on the Earth's surface.
 * sat_used: number of satellites used to fix the lat and lon coordinates
+
+### Calculate the mean and standard deviation of speed
+
+```r
+gps_mean_x <- gps_data %>% 
+                summarize(
+                  speed_mean = mean(speed),
+                  speed_sd = sd(speed)
+                )
+
+head(gps_mean_x)
+```
+
+```
+## # A tibble: 1 x 2
+##   speed_mean speed_sd
+##        <dbl>    <dbl>
+## 1      0.472     2.24
+```
+
+### Make a plot of the lat and lon data
+
+Which axes should we have on the x and y axes
+
+```r
+gps_plot_1 <- ggplot(gps_data) + 
+                  geom_point(aes(x = lon, y = lat))
+plot(gps_plot_1)
+```
+
+![](physical_activity_data_science_code_files/figure-html/unnamed-chunk-12-1.png)<!-- -->
+
+### Connect with Google Maps using `ggmap` 
+
+```r
+avalon_basemap <- get_map(location = "St. John's, Newfoundland, Canada",
+                     source = "google",
+                     maptype = "roadmap", crop = FALSE,
+                     zoom = 14)
+```
+
+```
+## Source : https://maps.googleapis.com/maps/api/staticmap?center=St.%20John's,%20Newfoundland,%20Canada&zoom=14&size=640x640&scale=2&maptype=roadmap&language=en-EN&key=xxx-A5x5M7s
+```
+
+```
+## Source : https://maps.googleapis.com/maps/api/geocode/json?address=St.+John's,+Newfoundland,+Canada&key=xxx-A5x5M7s
+```
+
+```r
+plot(avalon_basemap)
+```
+
+![](physical_activity_data_science_code_files/figure-html/unnamed-chunk-13-1.png)<!-- -->
+
+### Combine ggmap with points
+
+```r
+maps_points <- ggmap(avalon_basemap) + 
+                  geom_point(aes(x = lon, y = lat), data = gps_data, alpha = 0.2)
+
+plot(maps_points)
+```
+
+![](physical_activity_data_science_code_files/figure-html/unnamed-chunk-14-1.png)<!-- -->
+
+### Colour GPS data by speed
+
+```r
+maps_speed <- ggmap(avalon_basemap) + 
+                  geom_point(aes(x = lon, y = lat, colour = speed), data = gps_data, alpha = 0.2)
+
+plot(maps_speed)
+```
+
+![](physical_activity_data_science_code_files/figure-html/unnamed-chunk-15-1.png)<!-- -->
+
 

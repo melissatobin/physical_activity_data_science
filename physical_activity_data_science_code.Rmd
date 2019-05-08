@@ -94,6 +94,14 @@ gps_data <- read_csv("gps_data_example.csv")
 head(gps_data) 
 ```
 
+### Missing data
+
+I know there is missing data. We are going to remove all missing. If you had
+```{r}
+gps_data <- gps_data %>% 
+              drop_na()
+```
+
 ### GPS Data description
 * ts: second of measurement to 13 decimal places
 * utcdate: the data to the second in utc time
@@ -142,10 +150,10 @@ plot(maps_points)
 
 ### Colour GPS data by speed
 ```{r}
-maps_points <- ggmap(avalon_basemap) + 
+maps_speed <- ggmap(avalon_basemap) + 
                   geom_point(aes(x = lon, y = lat, colour = speed), data = gps_data, alpha = 0.2)
 
-plot(maps_points)
+plot(maps_speed)
 ```
 
 
