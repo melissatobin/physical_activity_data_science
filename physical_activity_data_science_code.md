@@ -8,8 +8,37 @@ output:
 ---
 
 
+```r
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
 
-## Answer key for Physical Activity Data Science Workshop
+```
+## ── Attaching packages ───────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
+```
+
+```
+## ✔ ggplot2 2.2.1     ✔ purrr   0.2.4
+## ✔ tibble  1.4.2     ✔ dplyr   0.7.4
+## ✔ tidyr   0.8.0     ✔ stringr 1.3.0
+## ✔ readr   1.1.1     ✔ forcats 0.3.0
+```
+
+```
+## ── Conflicts ──────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+```
+
+# Answer key for Physical Activity Data Science Workshop
+
+## Get the libraries we need
+
+```r
+library(tidyverse)
+```
+
+## Accelerometer data section
 
 ### Read in the data
 
@@ -46,6 +75,14 @@ head(accel_data)
 ## 5     5 2018-08-02 16:16:50 3.10e13    33    12  -428
 ## 6     6 2018-08-02 16:16:50 3.10e13    53    98  -443
 ```
+
+### Accel Data description
+* rowid: unique identifier for each row
+* utcdate: the data to the second in utc time
+* ts: second of measurement to 13 decimal places
+* x: the x axis of acceleration measured in g units of gravity (1g = 9.81m/s^2)
+* y: the x axis of acceleration measured in g 
+* z: the x axis of acceleration measured in g 
 
 ### Exploring x,y,z
 
@@ -97,7 +134,7 @@ accel_plot_x <- ggplot(accel_data) +
 plot(accel_plot_x)
 ```
 
-![](physical_activity_data_science_code_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
+![](physical_activity_data_science_code_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
 
 Cool. Now we can add all the other axes and see them together. 
 
@@ -109,8 +146,63 @@ accel_plot <- ggplot(accel_data) +
 plot(accel_plot)
 ```
 
-![](physical_activity_data_science_code_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
+![](physical_activity_data_science_code_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
+
+## GPS data section
+
+### Read in the data
+
+```r
+gps_data <- read_csv("gps_data_example.csv")
+```
+
+```
+## Parsed with column specification:
+## cols(
+##   ts = col_double(),
+##   utcdate = col_datetime(format = ""),
+##   lat = col_double(),
+##   lon = col_double(),
+##   speed = col_double(),
+##   course = col_double(),
+##   mode = col_character(),
+##   fix = col_character(),
+##   alt = col_double(),
+##   mode1 = col_character(),
+##   mode2 = col_double(),
+##   sat_used = col_integer(),
+##   pdop = col_double(),
+##   hdop = col_double(),
+##   vdop = col_double(),
+##   sat_in_view = col_integer()
+## )
+```
 
 
+```r
+head(gps_data) 
+```
 
+```
+## # A tibble: 6 x 16
+##        ts utcdate               lat   lon speed course mode  fix     alt
+##     <dbl> <dttm>              <dbl> <dbl> <dbl>  <dbl> <chr> <chr> <dbl>
+## 1 3.10e13 2018-08-02 16:59:49  47.6 -52.7  2.76    -1  A     A      360 
+## 2 3.10e13 2018-08-02 16:59:50  47.6 -52.7  2.91    -1  A     A      360 
+## 3 3.10e13 2018-08-02 16:59:51  47.6 -52.7  2.8     -1  A     A      360.
+## 4 3.10e13 2018-08-02 16:59:52  47.6 -52.7  2.9     -1  A     A      360.
+## 5 3.10e13 2018-08-02 16:59:53  47.6 -52.7  3.01   221. A     A      360.
+## 6 3.10e13 2018-08-02 17:00:56  47.6 -52.7  2.38    -1  A     A      362.
+## # ... with 7 more variables: mode1 <chr>, mode2 <dbl>, sat_used <int>,
+## #   pdop <dbl>, hdop <dbl>, vdop <dbl>, sat_in_view <int>
+```
+
+### GPS Data description
+* ts: second of measurement to 13 decimal places
+* utcdate: the data to the second in utc time
+* lat: the latitude 
+    * geographic coordinate that specifies the north–south position of a point on the Earth's surface.
+* lon: the longitude
+    * geographic coordinate that specifies the east–west position of a point on the Earth's surface.
+* sat_used: number of satellites used to fix the lat and lon coordinates
 

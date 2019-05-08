@@ -7,12 +7,19 @@ output:
         keep_md: true
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=TRUE}
 knitr::opts_chunk$set(echo = TRUE)
-library(tidyverse)
 ```
 
-## Answer key for Physical Activity Data Science Workshop
+# Answer key for Physical Activity Data Science Workshop
+
+## Get the libraries we need
+```{r}
+library(tidyverse)
+library(ggmap)
+```
+
+## Accelerometer data section
 
 ### Read in the data
 ```{r}
@@ -24,6 +31,14 @@ accel_data <- read_csv("accel_data_example.csv")
 head(accel_data)
 ```
 
+### Accel Data description
+* rowid: unique identifier for each row
+* utcdate: the data to the second in utc time
+* ts: second of measurement to 13 decimal places
+* x: the x axis of acceleration measured in g units of gravity (1g = 9.81m/s^2)
+* y: the x axis of acceleration measured in g 
+* z: the x axis of acceleration measured in g 
+
 ### Exploring x,y,z
 
 Calculate the mean and standard deviation for the x axis and create a new data frame. 
@@ -33,6 +48,7 @@ accel_mean_x <- accel_data %>%
                   x_mean = mean(x),
                   x_sd = sd(x)
                 )
+
 head(accel_mean_x)
 ```
 
@@ -66,6 +82,70 @@ accel_plot <- ggplot(accel_data) +
 plot(accel_plot)
 ```
 
+## GPS data section
 
+### Read in the data
+```{r}
+gps_data <- read_csv("gps_data_example.csv")
+```
+
+### Check out the data
+```{r}
+head(gps_data) 
+```
+
+### GPS Data description
+* ts: second of measurement to 13 decimal places
+* utcdate: the data to the second in utc time
+* lat: the latitude 
+    * geographic coordinate that specifies the north–south position of a point on the Earth's surface.
+* lon: the longitude
+    * geographic coordinate that specifies the east–west position of a point on the Earth's surface.
+* sat_used: number of satellites used to fix the lat and lon coordinates
+
+### Calculate the mean and standard deviation of speed
+```{r}
+gps_mean_x <- gps_data %>% 
+                summarize(
+                  speed_mean = mean(speed),
+                  speed_sd = sd(speed)
+                )
+
+head(gps_mean_x)
+```
+
+### Make a plot of the lat and lon data
+
+Which axes should we have on the x and y axes
+```{r}
+gps_plot_1 <- ggplot(gps_data) + 
+                  geom_point(aes(x = lon, y = lat))
+plot(gps_plot_1)
+```
+
+### Connect with Google Maps using `ggmap` 
+```{r}
+avalon_basemap <- get_map(location = "St. John's, Newfoundland, Canada",
+                     source = "google",
+                     maptype = "roadmap", crop = FALSE,
+                     zoom = 14)
+plot(avalon_basemap)
+```
+
+### Combine ggmap with points
+```{r}
+maps_points <- ggmap(avalon_basemap) + 
+                  geom_point(aes(x = lon, y = lat), data = gps_data, alpha = 0.2)
+
+plot(maps_points)
+```
+
+### Colour GPS data by speed
+```{r}
+maps_points <- ggmap(avalon_basemap) + 
+                  geom_point(aes(x = lon, y = lat, colour = speed), data = gps_data, alpha = 0.2)
+
+plot(maps_points)
+```
 
 
