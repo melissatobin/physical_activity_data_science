@@ -318,7 +318,7 @@ maps_points <- ggmap(avalon_basemap) +
 plot(maps_points)
 ```
 
-Combine the ggplot and the Google map
+Colour the plot by speed
 ========================================================
 
 ```r
