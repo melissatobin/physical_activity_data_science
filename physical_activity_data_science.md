@@ -186,6 +186,13 @@ Mean and standard deviation for x axis
 ========================================================
 
 ```r
+mean(data$xcounts)
+```
+
+Mean and standard deviation for x axis
+========================================================
+
+```r
 accel_mean_x <- accel_data %>% 
                 summarize(
                   x_mean = mean(x),
@@ -210,6 +217,35 @@ accel_mean <- accel_data %>%
                 )
 
 head(accel_mean)
+```
+
+Create a plot of the histogram of X
+========================================================
+
+```r
+accel_hist_x <- ggplot(accel_data) + 
+                  geom_histogram(aes(x))
+plot(accel_hist_x)
+```
+
+Create a plot of the desnity plot of X
+========================================================
+
+```r
+accel_dens_x <- ggplot(accel_data) + 
+                  geom_density(aes(x), colour = "blue")
+plot(accel_dens_x)
+```
+
+Create a plot of the desnity plot of X, Y, and Z
+========================================================
+
+```r
+accel_hist <- ggplot(accel_data) + 
+                  geom_density(aes(x), colour = "blue") + 
+                  geom_density(aes(y), colour = "red") + 
+                  geom_density(aes(z), colour = "purple")
+plot(accel_hist)
 ```
 
 Plot of the x axis over time

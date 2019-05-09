@@ -21,7 +21,7 @@ library(tidyverse)
 ```
 
 ```
-## ── Attaching packages ──────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
+## ── Attaching packages ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
 ```
 
 ```
@@ -32,7 +32,7 @@ library(tidyverse)
 ```
 
 ```
-## ── Conflicts ─────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+## ── Conflicts ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()
 ```
@@ -138,6 +138,42 @@ head(accel_mean)
 ## 1   10.4  -135.  -221.  32.4  34.7  32.3
 ```
 
+### Create a plot of the histogram of X
+
+```r
+accel_hist_x <- ggplot(accel_data) + 
+                  geom_histogram(aes(x))
+plot(accel_hist_x)
+```
+
+```
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+```
+
+![](physical_activity_data_science_code_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
+
+### Create a plot of the desnity plot of X
+
+```r
+accel_dens_x <- ggplot(accel_data) + 
+                  geom_density(aes(x), colour = "blue")
+plot(accel_dens_x)
+```
+
+![](physical_activity_data_science_code_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
+
+### Create a plot of the desnity plot of X, Y, and Z
+
+```r
+accel_hist <- ggplot(accel_data) + 
+                  geom_density(aes(x), colour = "blue") + 
+                  geom_density(aes(y), colour = "red") + 
+                  geom_density(aes(z), colour = "purple")
+plot(accel_hist)
+```
+
+![](physical_activity_data_science_code_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
+
 ### Create a plot of the x axis over time with time on the x axis and acceleration 
 
 ```r
@@ -146,7 +182,7 @@ accel_plot_x <- ggplot(accel_data) +
 plot(accel_plot_x)
 ```
 
-![](physical_activity_data_science_code_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
+![](physical_activity_data_science_code_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
 
 Cool. Now we can add all the other axes and see them together. 
 
@@ -154,11 +190,11 @@ Cool. Now we can add all the other axes and see them together.
 accel_plot <- ggplot(accel_data) + 
                   geom_point(aes(x = utcdate, y = x), colour = "blue", alpha = 0.1) + 
                   geom_point(aes(x = utcdate, y = y), colour = "red", alpha = 0.1) + 
-                  geom_point(aes(x = utcdate, y = z), colour = "green", alpha = 0.1) 
+                  geom_point(aes(x = utcdate, y = z), colour = "purple", alpha = 0.1) 
 plot(accel_plot)
 ```
 
-![](physical_activity_data_science_code_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
+![](physical_activity_data_science_code_files/figure-html/unnamed-chunk-10-1.png)<!-- -->
 
 ## GPS data section
 
@@ -257,7 +293,7 @@ gps_plot_1 <- ggplot(gps_data) +
 plot(gps_plot_1)
 ```
 
-![](physical_activity_data_science_code_files/figure-html/unnamed-chunk-12-1.png)<!-- -->
+![](physical_activity_data_science_code_files/figure-html/unnamed-chunk-15-1.png)<!-- -->
 
 ### Connect with Google Maps using `ggmap` 
 
@@ -280,7 +316,7 @@ avalon_basemap <- get_map(location = "St. John's, Newfoundland, Canada",
 plot(avalon_basemap)
 ```
 
-![](physical_activity_data_science_code_files/figure-html/unnamed-chunk-13-1.png)<!-- -->
+![](physical_activity_data_science_code_files/figure-html/unnamed-chunk-16-1.png)<!-- -->
 
 ### Combine ggmap with points
 
@@ -291,7 +327,7 @@ maps_points <- ggmap(avalon_basemap) +
 plot(maps_points)
 ```
 
-![](physical_activity_data_science_code_files/figure-html/unnamed-chunk-14-1.png)<!-- -->
+![](physical_activity_data_science_code_files/figure-html/unnamed-chunk-17-1.png)<!-- -->
 
 ### Colour GPS data by speed
 
@@ -302,6 +338,6 @@ maps_speed <- ggmap(avalon_basemap) +
 plot(maps_speed)
 ```
 
-![](physical_activity_data_science_code_files/figure-html/unnamed-chunk-15-1.png)<!-- -->
+![](physical_activity_data_science_code_files/figure-html/unnamed-chunk-18-1.png)<!-- -->
 
 
